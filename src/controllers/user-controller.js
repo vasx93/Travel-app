@@ -118,6 +118,7 @@ module.exports = {
 				}
 				return validUpdates;
 			});
+
 			// saving photos
 			if (req.file) validUpdates.photo = req.file.filename;
 

@@ -110,9 +110,6 @@ userSchema.methods.toJSON = function () {
 		delete user.id;
 	}
 
-	delete user.userTours;
-	delete user.userReviews;
-
 	return user;
 };
 

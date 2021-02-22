@@ -32,7 +32,7 @@ if (updateAccount) {
 	updateAccount.addEventListener('submit', e => {
 		e.preventDefault();
 
-		// email password and photo form
+		//email password and photo form
 		const form = new FormData();
 
 		form.append('name', document.getElementById('name').value);

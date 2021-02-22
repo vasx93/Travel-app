@@ -4,17 +4,23 @@ const { checkToken, isAvailableFor } = require('../middleware/helpers');
 const {
 	getCheckoutSession,
 	getAllBookings,
+	getOneBooking,
+	updateBooking,
+	deleteBooking,
 } = require('../controllers/booking-controller');
 
 const router = express.Router();
 
-router.get('/checkout-session/:tourId', checkToken, getCheckoutSession);
+router.use(checkToken);
 
-router.get(
-	'/all',
-	checkToken,
-	isAvailableFor('guide', 'admin'),
-	getAllBookings
-);
+router.get('/checkout-session/:tourId', getCheckoutSession);
+
+router.route('/').get(isAvailableFor('guide', 'admin'), getAllBookings);
+
+router
+	.route('/:id')
+	.get(isAvailableFor('user', 'guide', 'admin'), getOneBooking)
+	.patch(isAvailableFor('guide', 'admin'), updateBooking)
+	.delete(isAvailableFor('admin'), deleteBooking);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Review = require('../mongodb/models/review-model');
+const User = require('../mongodb/models/user-model');
 
 module.exports = {
 	async createReview(req, res) {
@@ -6,6 +7,12 @@ module.exports = {
 			const tour = req.body.tour ? req.body.tour : req.params.tourId;
 			const user = req.body.user ? req.body.user : req.user;
 
+			// Simple check to see if req.user has booked this tour
+			if (!req.user.userTours.includes(tour)) {
+				return res.status(401).send();
+			}
+
+			// Create review
 			const review = await Review.create({
 				review: req.body.review,
 				rating: req.body.rating,
@@ -17,9 +24,9 @@ module.exports = {
 				return res.status(400).send();
 			}
 
+			// save to user doc
 			req.user.userReviews = review;
-			req.user.userTours = tour;
-			await req.user.save();
+			await req.user.save({ runValidators: true, new: true });
 
 			res.status(201).send(review);
 		} catch (e) {

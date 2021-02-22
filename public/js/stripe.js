@@ -8,7 +8,7 @@ export async function bookTour(tourId) {
 		// API checkout session
 		const session = await axios({
 			method: 'GET',
-			url: `http://localhost:5555/api/booking/checkout-session/${tourId}`,
+			url: `http://localhost:5555/api/bookings/checkout-session/${tourId}`,
 		});
 		console.log(session);
 

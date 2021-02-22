@@ -4,8 +4,8 @@ import { showAlert } from './alerts';
 export async function login(email, password) {
 	try {
 		const res = await axios.post('http://localhost:5555/api/users/login', {
-			email: email,
-			password: password,
+			email,
+			password,
 		});
 
 		if (res.status === 200) {
@@ -36,7 +36,7 @@ export async function updateBase(data) {
 		const res = await axios({
 			method: 'PATCH',
 			url: 'http://localhost:5555/api/users/me',
-			data: data,
+			data,
 		});
 
 		if (res.status === 200) {

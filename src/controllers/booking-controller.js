@@ -54,9 +54,16 @@ module.exports = {
 		}
 		await Booking.create({ tour, user, price });
 
+		//* save the booked tour to user doc
+		const bookedBy = await User.findById(user);
+		bookedBy.userTours.push(tour);
+		await bookedBy.save({ runValidators: true, new: true });
+
 		//* Clear query string from url => req.originalUrl
 		res.redirect(req.originalUrl.split('?')[0]);
 	},
+
+	//*   ~~~~~  BOOKING CRUD  ~~~~~
 
 	async getAllBookings(req, res) {
 		try {
@@ -70,6 +77,57 @@ module.exports = {
 				results: bookings.length,
 				bookings,
 			});
+		} catch (err) {
+			return res.status(400).send(err.message);
+		}
+	},
+
+	async getOneBooking(req, res) {
+		try {
+			const booking = await Booking.findById(req.params.id);
+
+			if (!booking) {
+				return res.status(404).send();
+			}
+
+			res.status(200).send({
+				booking,
+			});
+		} catch (err) {
+			return res.status(400).send(err.message);
+		}
+	},
+
+	async updateBooking(req, res) {
+		try {
+			const updates = { ...req.body };
+
+			const booking = await Booking.findByIdAndUpdate(req.params.id, updates, {
+				new: true,
+				runValidators: true,
+			});
+
+			if (!booking) {
+				return res.status(404).send();
+			}
+
+			res.status(200).send({
+				booking,
+			});
+		} catch (err) {
+			return res.status(400).send(err.message);
+		}
+	},
+
+	async deleteBooking(req, res) {
+		try {
+			const booking = await Booking.findByIdAndDelete(req.params.id);
+
+			if (!booking) {
+				return res.status(404).send();
+			}
+
+			res.status(204).send();
 		} catch (err) {
 			return res.status(400).send(err.message);
 		}

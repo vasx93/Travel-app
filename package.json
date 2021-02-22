@@ -4,10 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "NODE_ENV=prod node ./src/index.js",
+		"start": "node ./src/index.js",
 		"dev": "nodemon ./src/index.js",
 		"debug": "ndb ./src/index.js",
-		"watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+		"build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
 	},
 	"author": "Vasko Raketic",
 	"license": "ISC",

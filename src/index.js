@@ -32,19 +32,9 @@ const limiter = rateLimit({
 	message: 'Too many requests from this IP, please try again later',
 });
 
-// var whitelist = ['http://localhost:5555', 'https://js.stripe.com/v3/'];
-// var corsOptionsDelegate = function (req, callback) {
-// 	var corsOptions;
-// 	if (whitelist.indexOf(req.header('Origin')) !== -1) {
-// 		corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-// 	} else {
-// 		corsOptions = { origin: false }; // disable CORS for this request
-// 	}
-// 	callback(null, corsOptions); // callback expects two parameters: error and options
-// };
 app.use(helmet());
 app.use(limiter);
-// app.use(cors());
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '10kb' }));
@@ -59,16 +49,15 @@ app.use((req, res, next) => {
 	res.setHeader('Content-Security-Policy', 'script-src * ');
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Content-Type');
-	return next();
+	next();
 });
-app.options('*', cors());
 
 //*     ~~~~~     ROUTE HANDLERS     ~~~~~
 
 app.use('/api/users', userRouter);
 app.use('/api/tours', tourRouter);
 app.use('/api/reviews', reviewRouter);
-app.use('/api/booking', bookingRouter);
+app.use('/api/bookings', bookingRouter);
 app.use('/', viewRouter);
 
 //! requests that pass the route handlers --> not caught

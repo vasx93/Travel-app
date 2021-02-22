@@ -8654,7 +8654,7 @@ function _bookTour() {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'GET',
-              url: "http://localhost:5555/api/booking/checkout-session/".concat(tourId)
+              url: "http://localhost:5555/api/bookings/checkout-session/".concat(tourId)
             });
 
           case 3:
@@ -8970,7 +8970,7 @@ if (logoutBtn) {
 
 if (updateAccount) {
   updateAccount.addEventListener('submit', function (e) {
-    e.preventDefault(); // email password and photo form
+    e.preventDefault(); //email password and photo form
 
     var form = new FormData();
     form.append('name', document.getElementById('name').value);
@@ -9027,7 +9027,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50129" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63982" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

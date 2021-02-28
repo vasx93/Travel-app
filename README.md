@@ -6,7 +6,7 @@ Some key features include:
 - CRUD Routes for users/tours/reviews/bookings
 - Roles authentication,
 - user accounts with option to change all info
-- upload and resize middleware for user photos
+- upload and resize middleware for user/tour/cover photos
 - emails on sign up, delete acount and others
 - deactivate/reactivate account via email token
 - reset password via email token

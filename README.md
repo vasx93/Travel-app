@@ -15,3 +15,9 @@ Some key features include:
 - fully working stripe payments processor
 
 While building this app my focus was on improving my skills in handling user authentication, referencing and embedding models in MongoDB, app security and endpoints structure.
+
+~~~ WORK IN PROGRESS ~~
+- displaying views for admin panel
+- working admin panel crud options
+
+

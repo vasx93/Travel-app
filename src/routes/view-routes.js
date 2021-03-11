@@ -1,11 +1,19 @@
 const express = require('express');
-const { isLoggedIn, checkToken } = require('../middleware/helpers');
+const {
+	isLoggedIn,
+	checkToken,
+	isAvailableFor,
+} = require('../middleware/helpers');
 const {
 	showOverview,
 	showTour,
+	signup,
 	login,
 	userProfile,
 	myTours,
+	myReviews,
+	adminTours,
+	adminUsers,
 } = require('../controllers/view-controller');
 const {
 	createBookingCheckoutMiddleware,
@@ -13,12 +21,24 @@ const {
 
 const router = express.Router();
 
-router.get('/', isLoggedIn, createBookingCheckoutMiddleware, showOverview);
+//* IF user is logged in
+router.use(isLoggedIn);
 
-router.get('/tour/:slug', isLoggedIn, showTour);
+router.get('/signup', signup);
+router.get('/login', login);
 
-router.get('/login', isLoggedIn, login);
-router.get('/me', checkToken, userProfile);
-router.get('/my-tours', checkToken, myTours);
+router.get('/', createBookingCheckoutMiddleware, showOverview);
+router.get('/tour/:slug', showTour);
+
+// Protected user routes
+router.use(checkToken);
+
+router.get('/me', userProfile);
+router.get('/my-tours', myTours);
+router.get('/my-reviews', myReviews);
+
+//*   ~~~   ADMIN PANEL   ~~~
+router.get('/admin-panel/tours/:id', isAvailableFor('admin'), adminTours);
+router.get('/admin-panel/users', isAvailableFor('admin'), adminUsers);
 
 module.exports = router;

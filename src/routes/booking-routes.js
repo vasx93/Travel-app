@@ -9,7 +9,7 @@ const {
 	deleteBooking,
 } = require('../controllers/booking-controller');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use(checkToken);
 

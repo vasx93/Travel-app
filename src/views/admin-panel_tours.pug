@@ -1,0 +1,48 @@
+extends base
+
+mixin tourField(field, inputType, inputValue)
+  p.tour__field= field
+  input.tour__input(type=`${inputType}` name=`${field}`, value=`${inputValue}` required)
+
+block content
+
+  main.main
+    .tour__container
+      +tourField('Name', 'text', `${tour.name}`)
+      +tourField('Duration', 'text', `${tour.duration} days`)
+      +tourField('Difficulty', 'text', `${tour.difficulty}`)
+      +tourField('Price', 'text', `$${tour.price}`)
+      +tourField('Average Rating', 'text', `${tour.ratingsAverage}`)
+      +tourField('Total Ratings', 'text', `${tour.ratingsQuantity} ratings`)
+      +tourField('Max Group Size', 'text', `${tour.maxGroupSize} people`)
+      +tourField('Start Location', 'text', `${tour.startLocation.address}`)
+
+      each date in tour.startDates
+        - let startDate = date.toLocaleString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric'})
+        +tourField('Start Date', 'text', `${startDate}`)
+      
+      each loc in tour.locations
+        +tourField('Location', 'text', `Day ${loc.day} - ${loc.description}`)
+      
+      .guide__container
+        each g in tour.guides
+          .tour__guide
+            +tourField('Guide', 'text', `${g.name}`)
+            +tourField('Email', 'email', `${g.email}`)
+            img.form__user-photo(src=`/img/users/${g.photo}`, alt='Guide photo')
+            input.tour__input.new-photo(type='file' accept='image/*' name='photo' id='photo')
+
+      +tourField('Summary', 'text', `${tour.summary}`)
+      +tourField('Description', 'text', `${tour.description}`)
+
+      each img in tour.images
+        p.tour__field Tour Images
+        img.form__user-photo(src=`/img/tours/${img}`, alt='Tour images')
+        input.tour__input.new-photo(type='file' accept='image/*' name='image' id='image')
+
+      p.tour__field Cover Image
+      img.header__hero-img(src=`/img/tours/${tour.imageCover}`, alt=`${tour.name}`)
+      input.tour__input.new-photo(type='file' accept='image/*' name='imageCover' id='imageCover')
+
+      //TODO -ubaci submit formu za promene, + middleware sa sve slike, i napravi controler za edit
+      

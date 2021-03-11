@@ -14,9 +14,9 @@ block content
       nav.user-view__menu
         ul.side-nav
 
-          +navItem('#', 'Settings', 'settings', true)
+          +navItem('/me', 'Settings', 'settings', true)
           +navItem('/my-tours', 'My Bookings', 'briefcase')
-          +navItem('#', 'My Reviews', 'star')
+          +navItem('/my-reviews', 'My Reviews', 'star')
           +navItem('#', 'Billing', 'credit-card')
 
 
@@ -25,10 +25,10 @@ block content
           .admin-nav
             h5.admin-nav__heading Admin
             ul.side-nav
-              +navItem('#', 'Manage Tours', 'map')
-              +navItem('#', 'Manage Users', 'users')
-              +navItem('#', 'Manage Reviews', 'star')
-              +navItem('#', 'Manage Bookings', 'briefcase')
+              +navItem('/', 'Manage Tours', 'map')
+              +navItem('/admin-panel/users', 'Manage Users', 'users')
+              +navItem('/admin-panel/reviews', 'Manage Reviews', 'star')
+              +navItem('/admin-panel/bookings', 'Manage Bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container
@@ -45,7 +45,6 @@ block content
 
               input.form__upload(type='file' accept='image/*' id='photo' name='photo')
               label(for='photo') Choose new photo
-              //- a.btn-text(href='') Choose new photo
               .form__group.right
               button.btn.btn--small.btn--green Save settings
 

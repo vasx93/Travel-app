@@ -25,7 +25,7 @@ block content
             .card__data
               svg.card__icon
                 use(xlink:href='/img/icons.svg#icon-calendar')
-              span #{tour.startDates[0].toLocaleString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
+              span #{tour.startDates[0].toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}
             .card__data
               svg.card__icon
                 use(xlink:href='/img/icons.svg#icon-flag')
@@ -36,12 +36,17 @@ block content
               span #{tour.maxGroupSize} people
 
           .card__footer
-            p
-              span.card__footer-value $#{tour.price}
-              |
-              span.card__footer-text  per person
-            p.card__ratings
-              span.card__footer-value #{tour.ratingsAverage} rating
-              |
-              span.card__footer-text  (#{tour.ratingsQuantity})
-            a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details
+            .footer__top-container
+              p
+                span.card__footer-value $#{tour.price}
+                |
+                span.card__footer-text  per person
+              p.card__ratings
+                span.card__footer-value #{tour.ratingsAverage} rating
+                |
+                span.card__footer-text  (#{tour.ratingsQuantity})
+              a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details
+
+            if (user && user.role === 'admin')
+              a.btn.btn-purple.btn--full#admin-edit(href=`/admin-panel/tours/${tour.id}`) Edit
+                

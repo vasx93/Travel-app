@@ -116,7 +116,7 @@ module.exports = {
 			}
 			res.status(200).send({ results: tours.length, tours });
 		} catch (err) {
-			res.status(400).send(err);
+			res.status(400).send(err.message);
 		}
 	},
 
@@ -132,7 +132,7 @@ module.exports = {
 			}
 			res.status(200).send(tour);
 		} catch (err) {
-			res.status(400).send(err);
+			res.status(400).send(err.message);
 		}
 	},
 
@@ -163,7 +163,7 @@ module.exports = {
 
 			res.status(201).send({ message: 'Tour created!', tour });
 		} catch (err) {
-			res.status(500).send(err);
+			res.status(500).send(err.message);
 		}
 	},
 
@@ -206,7 +206,7 @@ module.exports = {
 
 			res.status(200).send({ message: 'Tour updated!', tour });
 		} catch (err) {
-			res.status(400).send(err);
+			res.status(400).send(err.message);
 		}
 	},
 
@@ -217,9 +217,9 @@ module.exports = {
 			if (!tour) {
 				return res.status(404).send();
 			}
-			res.send({ message: 'Tour deleted!', tour });
+			res.status(204).send();
 		} catch (err) {
-			res.status(400).send(err);
+			res.status(400).send(err.message);
 		}
 	},
 
@@ -256,7 +256,7 @@ module.exports = {
 
 			res.status(200).send(stats);
 		} catch (err) {
-			res.status(400).send(err);
+			res.status(400).send(err.message);
 		}
 	},
 
@@ -299,7 +299,22 @@ module.exports = {
 			}
 			res.status(200).send(plan);
 		} catch (err) {
-			res.status(400).send(err);
+			res.status(400).send(err.message);
+		}
+	},
+
+	// nested route
+	async tourBookings(req, res) {
+		try {
+			const tour = await Tour.findById(req.params.id).populate('bookings');
+
+			if (!tour) {
+				return res.status(404).send();
+			}
+
+			res.status(200).send(tour.bookings);
+		} catch (err) {
+			res.status(400).send(err.message);
 		}
 	},
 };

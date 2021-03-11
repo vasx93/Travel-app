@@ -1,0 +1,34 @@
+extends base
+
+block content
+
+  main.main
+    // display each user from users collection
+    .users__container
+      each user in users
+       - const date = user.createdAt.toLocaleString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})
+       - const upDate = user.updatedAt.toLocaleString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})
+
+        .users__card
+          .users__imgbox        
+            img.form__user-photo(src=`/img/users/${user.photo}`, alt='User photo')
+            h4
+              b= user.name
+          .users__info
+            .users__info-labels
+              p Email
+              p Active
+              p Created At
+              p Updated At
+            .users__info-text
+              p= user.email
+              p= user.active
+              p= date 
+              p= upDate
+          .users__editbox
+            a.btn.btn-purple#admin-edit(href=`/admin-panel/users/${user.id}`) Edit
+            button.btn.btn-purple.span-all-rows#delete-tour(data-user-id=`${user.id}`) Delete
+
+
+
+

@@ -54,7 +54,7 @@ module.exports = {
 		}
 		await Booking.create({ tour, user, price });
 
-		//* save the booked tour to user doc
+		//* save the booked tour to user & tour doc
 		const bookedBy = await User.findById(user);
 		bookedBy.userTours.push(tour);
 		await bookedBy.save({ runValidators: true, new: true });
@@ -67,7 +67,12 @@ module.exports = {
 
 	async getAllBookings(req, res) {
 		try {
-			const bookings = await Booking.find();
+			let filter = {};
+
+			if (req.params.id) {
+				filter = { tour: req.params.id };
+			}
+			const bookings = await Booking.find(filter);
 
 			if (!bookings) {
 				return res.status(404).send();
@@ -77,8 +82,8 @@ module.exports = {
 				results: bookings.length,
 				bookings,
 			});
-		} catch (err) {
-			return res.status(400).send(err.message);
+		} catch (e) {
+			res.status(400).send(e);
 		}
 	},
 

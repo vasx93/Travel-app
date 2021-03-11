@@ -79,7 +79,12 @@ block content
         h2.heading-secondary What are you waiting for?
         p.cta__text #{tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
 
-        if user
+        if (user && user.role === 'user')
           button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-        else
+        else if ( user && user.role === 'admin')
+          //- .admin__tour__cta
+          a.button.btn.btn--green.span-all-rows(href='/login') Book tour now!
+          a.button.btn.btn-purple.span-all-rows(href=`/admin-panel/tours/${tour.id}`) Edit
+          button.btn.btn-purple.span-all-rows#delete-tour(data-tour-id=`${tour.id}`) Delete
+        else 
           a.button.btn.btn--green.span-all-rows(href='/login') Login to book tour

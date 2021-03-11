@@ -120,7 +120,9 @@ module.exports = {
 			});
 
 			// saving photos
-			if (req.file) validUpdates.photo = req.file.filename;
+			if (req.file) {
+				validUpdates.photo = req.file.filename;
+			}
 
 			const user = await User.findByIdAndUpdate(req.user._id, validUpdates, {
 				new: true,
@@ -287,21 +289,21 @@ module.exports = {
 
 	async signUp(req, res) {
 		try {
-			const user = await User.create({
-				name: req.body.name,
-				email: req.body.email,
-				password: req.body.password,
-				photo: req.body.photo,
-			});
+			// Create and save user to DB
+			const userObj = { ...req.body };
+			const user = await User.create(userObj);
 
 			if (!user) {
 				return res.status(400).send();
 			}
-			const url = `${req.protocol}://${req.get('host')}/me`;
-			welcomeEmail(user, url);
 
+			// Log user in and send jwt
 			const token = await user.generateToken(user._id);
 			res.cookie('jwt', token, cookieOptions);
+
+			// Send a welcome email to a new user
+			const url = `${req.protocol}://${req.get('host')}/me`;
+			welcomeEmail(user, url);
 
 			res
 				.status(201)

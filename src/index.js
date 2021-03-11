@@ -45,6 +45,7 @@ app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp({ whitelist: ['duration', 'difficulty'] }));
 
+//* CORS POLICY
 app.use((req, res, next) => {
 	res.setHeader('Content-Security-Policy', 'script-src * ');
 	res.header('Access-Control-Allow-Origin', '*');
@@ -76,5 +77,7 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT;
 app.listen(port, () => {
-	console.log(`---server up on port ${port}`);
+	console.log(
+		`--- Server running in ${process.env.NODE_ENV} enviroment, port ${port}`
+	);
 });

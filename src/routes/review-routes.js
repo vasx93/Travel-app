@@ -1,6 +1,8 @@
 const express = require('express');
+const { isValidObjectId } = require('mongoose');
 const {
 	getAllReviews,
+	getOneReview,
 	createReview,
 	updateReview,
 	deleteReview,
@@ -22,6 +24,7 @@ router.use(checkToken);
 
 router
 	.route('/:id')
+	.get(isAvailableFor('user', 'guide', 'admin'), getOneReview)
 	.patch(isAvailableFor('user', 'admin'), updateReview)
 	.delete(isAvailableFor('user', 'admin'), deleteReview);
 

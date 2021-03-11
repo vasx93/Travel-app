@@ -130,6 +130,12 @@ tourSchema.virtual('reviews', {
 	foreignField: 'tour',
 });
 
+tourSchema.virtual('bookings', {
+	ref: 'Booking',
+	localField: '_id',
+	foreignField: 'tour',
+});
+
 // tourSchema.virtual('punoKosta').get(function () {
 // 	return this.price * 12;
 // });

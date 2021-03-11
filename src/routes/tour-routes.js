@@ -10,14 +10,19 @@ const {
 	getTourStats,
 	topFiveTours,
 	longestFiveTours,
+	tourBookings,
 	upload,
 	uploadImg,
 } = require('../controllers/tour-controller');
 const reviewRouter = require('../routes/review-routes');
+const bookingRouter = require('../routes/booking-routes');
 
 const router = express.Router();
 
-router.use('/:tourId/reviews', reviewRouter);
+// nested and merged routes
+router.use('/:id/reviews', reviewRouter);
+
+router.use('/:id/bookings', bookingRouter);
 
 // popular
 router.route('/top-5-tours').post(topFiveTours, getAllTours);
@@ -30,16 +35,14 @@ router
 	.get(checkToken, isAvailableFor('admin'), getMonthlyPlan);
 
 //* GENERAL Routes
-router.route('/').get(getAllTours).post(createTour);
 
-//* PROTECTED Routes
+router.use(checkToken, isAvailableFor('admin'));
+router.route('/').get(getAllTours).post(createTour);
 
 router
 	.route('/:id')
 	.get(getTour)
 	.patch(
-		checkToken,
-		isAvailableFor('guide', 'admin'),
 		upload.fields([
 			{ name: 'imageCover', maxCount: 1 },
 			{ name: 'images', maxCount: 3 },
@@ -47,6 +50,6 @@ router
 		uploadImg,
 		updateTour
 	)
-	.delete(checkToken, isAvailableFor('guide', 'admin'), deleteTour);
+	.delete(deleteTour);
 
 module.exports = router;

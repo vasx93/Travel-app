@@ -51,7 +51,6 @@ router.patch(
 //* PROTECTED ROUTES
 router.use(checkToken);
 
-// router.patch('/me/photo', upload.single('photo'), uploadPhoto);
 router.patch('/me/password', updatePassword);
 
 router

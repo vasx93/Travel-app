@@ -1,13 +1,13 @@
 {
-	"name": "natours",
+	"name": "Travel-app",
 	"version": "1.0.0",
-	"description": "",
+	"description": "Booking travel tours",
 	"main": "index.js",
 	"scripts": {
-		"start": "node ./src/index.js",
-		"dev": "nodemon ./src/index.js",
-		"debug": "ndb ./src/index.js",
-		"build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+		"start": "set NODE_ENV=production&& node ./src/index.js",
+		"dev": "set NODE_ENV=development&& nodemon ./src/index.js",
+		"debug": "set NODE_ENV=development&& ndb ./src/index.js",
+		"build:js": "set NODE_ENV=development&& parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
 	},
 	"author": "Vasko Raketic",
 	"license": "ISC",

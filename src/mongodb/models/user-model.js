@@ -127,7 +127,7 @@ userSchema.statics.loginUser = async (email, password) => {
 		throw new myError('Account not active');
 	}
 
-	const match = await bcrypt.compare(password, user.password);
+	const match = await user.comparePassword(password, user.password);
 
 	if (!match) {
 		throw new myError('Wrong credentials');

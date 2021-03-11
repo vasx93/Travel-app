@@ -1,6 +1,7 @@
 const Booking = require('../mongodb/models/booking-model');
 const Tour = require('../mongodb/models/tour-model');
 const User = require('../mongodb/models/user-model');
+const Review = require('../mongodb/models/review-model');
 
 module.exports = {
 	async showOverview(req, res) {
@@ -52,6 +53,19 @@ module.exports = {
 		}
 	},
 
+	async signup(req, res) {
+		try {
+			res.status(200).render('signup', {
+				title: 'Sign up for your account',
+			});
+		} catch (e) {
+			res.status(400).render('error', {
+				title: 'Something went wrong!',
+				msg: e.message,
+			});
+		}
+	},
+
 	async login(req, res) {
 		try {
 			res.status(200).render('login', {
@@ -88,15 +102,15 @@ module.exports = {
 
 	async myTours(req, res) {
 		try {
-			// Get access to tour IDs from all bookings
-			const bookings = await Booking.find({ user: req.user._id });
+			// Get access to tour IDs from all bookings, map it > query by it
+			// const userBookings = await Booking.find({ user: req.user._id });
+			// const tourIDsArray = userBookings.map(el => el.tour);
 
-			// save all tourIDs to an array -> query them
-			const tourIDs = bookings.map(el => el.tour);
+			const tourIDsArray = req.user.userTours.map(el => el);
 
-			const tours = await Tour.find({ _id: { $in: tourIDs } });
+			const tours = await Tour.find({ _id: { $in: tourIDsArray } });
 
-			if (!bookings || !tours) {
+			if (!tours || !tourIDsArray) {
 				return res.status(400).render('error', {
 					title: 'Something went wrong!',
 					msg: e.message,
@@ -106,6 +120,80 @@ module.exports = {
 			res.status(200).render('overview', {
 				title: 'My tours',
 				tours,
+				user: req.user,
+			});
+		} catch (e) {
+			res.status(400).render('error', {
+				title: 'Something went wrong!',
+				msg: e.message,
+			});
+		}
+	},
+
+	async myReviews(req, res) {
+		try {
+			const userReviewsArray = req.user.userReviews.map(el => el);
+
+			const reviews = await Review.find({ _id: { $in: userReviewsArray } });
+
+			if (!reviews || !userReviewsArray) {
+				return res.status(400).render('error', {
+					title: 'Something went wrong!',
+					msg: e.message,
+				});
+			}
+
+			res.status(200).render('reviews', {
+				title: 'My reviews',
+				reviews,
+			});
+		} catch (e) {
+			res.status(400).render('error', {
+				title: 'Something went wrong!',
+				msg: e.message,
+			});
+		}
+	},
+
+	//*   ~~~   ADMIN PANEL  ~~~
+
+	async adminTours(req, res) {
+		try {
+			const tour = await Tour.findById(req.params.id);
+
+			if (!tour) {
+				return res.status(404).render('error', {
+					title: 'Something went wrong!',
+					msg: '',
+				});
+			}
+
+			res.status(200).render('admin-panel_tours', {
+				title: 'Edit or Delete Tours',
+				tour,
+			});
+		} catch (e) {
+			res.status(400).render('error', {
+				title: 'Something went wrong!',
+				msg: e.message,
+			});
+		}
+	},
+	async adminUsers(req, res) {
+		try {
+			const users = await User.find();
+
+			if (!users) {
+				return res.status(404).render('error', {
+					title: 'No users for now!',
+					msg: '',
+				});
+			}
+			// res.status(200).send(users);
+
+			res.status(200).render('admin-panel-users', {
+				title: 'Edit or Delete Users',
+				users,
 			});
 		} catch (e) {
 			res.status(400).render('error', {

@@ -4,7 +4,7 @@ const User = require('../mongodb/models/user-model');
 module.exports = {
 	async createReview(req, res) {
 		try {
-			const tour = req.body.tour ? req.body.tour : req.params.tourId;
+			const tour = req.body.tour ? req.body.tour : req.params.id;
 			const user = req.body.user ? req.body.user : req.user;
 
 			// Simple check to see if req.user has booked this tour
@@ -38,8 +38,8 @@ module.exports = {
 		try {
 			let filter = {};
 
-			if (req.params.tourId) {
-				filter = { tour: req.params.tourId };
+			if (req.params.id) {
+				filter = { tour: req.params.id };
 			}
 			const reviews = await Review.find(filter);
 
@@ -51,6 +51,20 @@ module.exports = {
 				results: reviews.length,
 				reviews,
 			});
+		} catch (e) {
+			res.status(400).send(e);
+		}
+	},
+
+	async getOneReview(req, res) {
+		try {
+			const review = await Review.findById(req.params.id);
+
+			if (!review) {
+				return res.status(404).send();
+			}
+
+			res.status(200).send(review);
 		} catch (e) {
 			res.status(400).send(e);
 		}

@@ -82,7 +82,7 @@ app.use((err, req, res, next) => {
 	res.status(err.statusCode).send({ message: err.message });
 });
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(
 		`--- Server running in ${process.env.NODE_ENV} enviroment, port ${port}`

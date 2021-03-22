@@ -21,7 +21,6 @@ const router = express.Router();
 
 // nested and merged routes
 router.use('/:id/reviews', reviewRouter);
-
 router.use('/:id/bookings', bookingRouter);
 
 // popular
@@ -36,13 +35,17 @@ router
 
 //* GENERAL Routes
 
-router.use(checkToken, isAvailableFor('admin'));
-router.route('/').get(getAllTours).post(createTour);
+router
+	.route('/')
+	.get(getAllTours)
+	.post(checkToken, isAvailableFor('admin'), createTour);
 
 router
 	.route('/:id')
 	.get(getTour)
 	.patch(
+		checkToken,
+		isAvailableFor('admin'),
 		upload.fields([
 			{ name: 'imageCover', maxCount: 1 },
 			{ name: 'images', maxCount: 3 },
@@ -50,6 +53,6 @@ router
 		uploadImg,
 		updateTour
 	)
-	.delete(deleteTour);
+	.delete(checkToken, isAvailableFor('admin'), deleteTour);
 
 module.exports = router;

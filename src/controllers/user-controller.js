@@ -189,7 +189,7 @@ module.exports = {
 				return res.status(404).send({ message: 'No user found!' });
 			}
 
-			res.status(204).send({ message: 'User deleted', user });
+			res.status(204).send();
 		} catch (err) {
 			res.status(400).send({ error: err.message });
 		}
@@ -224,7 +224,6 @@ module.exports = {
 		}
 	},
 
-	//TODO ne radi kako treba iz nekog razloga
 	async reactivateProfile(req, res) {
 		try {
 			//hash the token in url
@@ -233,7 +232,6 @@ module.exports = {
 				.update(req.params.reactivateToken)
 				.digest('hex');
 
-			console.log(hashedToken);
 			// find user by hashed token
 			const user = await User.findOne({
 				reactivateAccountToken: hashedToken,
@@ -333,7 +331,7 @@ module.exports = {
 
 	async logoutUser(req, res) {
 		try {
-			// client part logout
+			// client part logout = fake jwt
 			res.cookie('jwt', 'nothing', {
 				expires: new Date(Date.now() + 10_000),
 				httpOnly: true,

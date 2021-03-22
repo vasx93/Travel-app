@@ -1,6 +1,7 @@
 const Tour = require('../mongodb/models/tour-model');
 const multer = require('multer');
 const sharp = require('sharp');
+const { qsHelper } = require('query-lib-vr');
 
 //* FILE UPLOAD
 
@@ -70,49 +71,11 @@ module.exports = {
 
 	async getAllTours(req, res) {
 		try {
-			const reqObj = { ...req.query };
-
-			// exclude everything other than match field -> later chain methods on found document
-			const excludedFields = [
-				'page',
-				'sort',
-				'limit',
-				'fields',
-				'skip',
-			].forEach(el => delete reqObj[el]);
-
-			//regEx filtering with >, =>, <, =<
-			let match = JSON.stringify(reqObj);
-			match = match.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
-
-			//get the matched documents from db
-			let QUERIES = Tour.find(JSON.parse(match));
-
-			//chain  methods
-			if (req.query.sort) {
-				QUERIES = QUERIES.sort(req.query.sort);
-			} else {
-				QUERIES = QUERIES.sort({ ratingsAverage: -1 });
-			}
-
-			if (req.query.fields) {
-				const fields = req.query.fields.split('_').join(' ');
-				QUERIES = QUERIES.select(fields);
-			}
-
-			if (req.query.limit) {
-				QUERIES = QUERIES.limit(req.query.limit * 1);
-			} else {
-				QUERIES = QUERIES.limit(10);
-			}
-
-			//resolve the promise and chain more methods
-			const tours = await QUERIES.skip(req.query.skip * 1);
+			// npm package query-lib-vr
+			const tours = await qsHelper(Tour, req, res);
 
 			if (tours.length === 0) {
-				return res
-					.status(200)
-					.send({ message: 'No results match this query', tours });
+				return res.status(200).send({ message: 'No results match this query' });
 			}
 			res.status(200).send({ results: tours.length, tours });
 		} catch (err) {
@@ -169,36 +132,60 @@ module.exports = {
 
 	async updateTour(req, res) {
 		try {
-			const reqObj = Object.keys(req.body);
-			const allowedUpdates = [
-				'name',
-				'duration',
-				'maxGroupSize',
-				'difficulty',
-				'ratingsAverage',
-				'ratingsQuantity',
-				'price',
-				'summary',
-				'description',
-				'imageCover',
-				'images',
-				'startDates',
-				'startLocation',
-				'locations',
-				'guides',
-			];
-			const validUpdates = {};
+			// const reqObj = Object.keys(req.body);
+			// const allowedUpdates = [
+			// 	'name',
+			// 	'duration',
+			// 	'maxGroupSize',
+			// 	'difficulty',
+			// 	'ratingsAverage',
+			// 	'ratingsQuantity',
+			// 	'price',
+			// 	'summary',
+			// 	'description',
+			// 	'imageCover',
+			// 	'images',
+			// 	'startDates',
+			// 	'startLocation',
+			// 	'locations',
+			// 	'day',
+			// 	'guides',
+			// ];
+			// const validUpdates = {};
 
-			// filtering req obj
-			reqObj.forEach(el => {
-				if (allowedUpdates.includes(el)) validUpdates[el] = req.body[el];
-				return validUpdates;
-			});
+			// // filtering req obj
+			// reqObj.forEach(el => {
+			// 	if (allowedUpdates.includes(el)) validUpdates[el] = req.body[el];
+			// 	return validUpdates;
+			// });
 
-			const tour = await Tour.findByIdAndUpdate(req.params.id, validUpdates, {
-				new: true,
-				runValidators: true,
-			});
+			// const tour = await Tour.findByIdAndUpdate(req.params.id, validUpdates, {
+			// 	new: true,
+			// 	runValidators: true,
+			// });
+
+			const locArray = req.body.locations;
+			const tour = await Tour.findByIdAndUpdate(
+				req.params.id,
+				{
+					name: req.body.name,
+					duration: req.body.duration,
+					difficulty: req.body.difficulty,
+					price: req.body.price,
+					ratingsAverage: req.body.ratingsAverage,
+					ratingsQuantity: req.body.ratingsQuantity,
+					maxGroupSize: req.body.maxGroupSize,
+					startLocation: req.body.startLocation,
+					summary: req.body.summary,
+					description: req.body.description,
+					startDates: req.body.startDates,
+					locations: req.body.locations,
+				},
+				{
+					new: true,
+					runValidators: true,
+				}
+			);
 
 			if (!tour) {
 				return res.status(404).send({ message: 'Tour not found' });

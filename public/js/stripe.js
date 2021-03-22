@@ -8,7 +8,7 @@ export async function bookTour(tourId) {
 		// API checkout session
 		const session = await axios({
 			method: 'GET',
-			url: `http://localhost:5555/api/bookings/checkout-session/${tourId}`,
+			url: `/api/bookings/checkout-session/${tourId}`,
 		});
 
 		// Create checkout form + charge card
@@ -16,7 +16,7 @@ export async function bookTour(tourId) {
 			sessionId: session.data.session.id,
 		});
 	} catch (err) {
-		console.log(err);
+		// console.log(err);
 		showAlert('error', err);
 	}
 }

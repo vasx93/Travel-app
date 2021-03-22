@@ -3,22 +3,24 @@ require('./mongodb/mongoose');
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
-
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const compression = require('compression');
+const app = express();
 
+// Import routers
 const tourRouter = require('./routes/tour-routes');
 const userRouter = require('./routes/user-routes');
 const reviewRouter = require('./routes/review-routes');
 const viewRouter = require('./routes/view-routes');
 const bookingRouter = require('./routes/booking-routes');
 
-const app = express();
-
+// Render pug template
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -39,6 +41,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
+app.use(compression());
 
 // prevent NoSQL query injection - cross site scripting - parameter polution
 app.use(mongoSanitize());
@@ -53,6 +56,10 @@ app.use((req, res, next) => {
 	next();
 });
 
+if (process.env.NODE_ENV === 'development') {
+	app.use(morgan('tiny'));
+	console.log('Morgan enabled...');
+}
 //*     ~~~~~     ROUTE HANDLERS     ~~~~~
 
 app.use('/api/users', userRouter);

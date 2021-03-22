@@ -47,7 +47,7 @@ body {
 
 .main {
 	background-color: #f7f7f7;
-	padding: 8rem 6rem;
+	padding: 6rem 6rem;
 	-webkit-box-flex: 1;
 	-ms-flex: 1;
 	flex: 1;
@@ -202,11 +202,12 @@ a {
 	border: none;
 	cursor: pointer;
 }
+
 .btn,
 .btn:link,
 .btn:visited {
 	font-size: 1.6rem;
-	padding: 1.4rem 3rem;
+	padding: 1.2rem 2rem;
 	border-radius: 10rem;
 	text-transform: uppercase;
 	display: inline-block;
@@ -768,6 +769,13 @@ a {
 }
 
 .cta__content {
+	display: flex;
+	justify-content: space-between;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+/* .cta__content {
 	display: grid;
 	grid-template-rows: auto auto;
 	grid-template-columns: 1fr auto;
@@ -775,6 +783,12 @@ a {
 	grid-auto-flow: column;
 	-webkit-box-align: center;
 	-ms-flex-align: center;
+	align-items: center;
+} */
+.cta__inner_text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	align-items: center;
 }
 .cta__text {
@@ -948,7 +962,7 @@ a {
 	text-shadow: 0 0.7rem 1rem black;
 }
 .nav__el:not(:last-child) {
-	margin-right: 3rem;
+	/* margin-right: 3rem; */
 }
 @media only screen and (max-width: 37.5em) {
 	.nav__el:not(:last-child) {
@@ -1188,6 +1202,15 @@ a {
 	width: 2rem;
 	fill: #55c57a;
 }
+.create__btn {
+	position: fixed;
+	z-index: 5;
+	bottom: 3%;
+	right: 3%;
+	fill: #55c57a;
+	height: 8rem;
+	width: 8rem;
+}
 .card__footer {
 	/* background-color: #ebe8e5; */
 	padding: 2rem 2rem;
@@ -1197,14 +1220,13 @@ a {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	/* margin: auto; */
 }
 .footer__top-container {
 	display: grid;
-	grid-template-columns: auto 1fr;
-	grid-column-gap: 1rem;
-	grid-row-gap: 1rem;
-	margin-top: auto;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 1rem;
+	text-align: center;
+	margin: auto;
 }
 .btn-purple {
 	background-color: #9370db;
@@ -1364,26 +1386,78 @@ a {
 	transform: translateY(-2px);
 }
 
-/** admin panel tour css */
+/** ADMIN TEXT FIELDS */
 .tour__container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	padding: 2rem;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	column-gap: 2rem;
-	row-gap: 2rem;
 	font-family: 'Montserrat', sans-serif;
 	color: #444;
 	font-size: 1.2rem;
 }
-
-.guide__container {
-	display: contents;
+.tour__container h2 {
+	text-align: center;
+	margin-bottom: 3rem;
+	text-transform: uppercase;
 }
+.admin__tour__text__form,
+.admin__tour__guide__form,
+.admin__tour__photo__form {
+	width: 100%;
+	padding: 0rem 2rem;
+	margin-bottom: 7%;
+}
+.admin__tour__text__form form {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	grid-gap: 2rem;
+	margin-bottom: 5%;
+}
+input.tour__input {
+	text-align: center;
+	height: 3rem;
+}
+
+#admin__tour__text__btn,
+#admin__tour__guide__btn,
+#admin__tour__photo__btn {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: -7% auto;
+}
+/** ADMIN GUIDE FIELDS */
+.admin__tour__guide__form form {
+	position: relative;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin-bottom: 5%;
+}
+/*  each tour guide div */
 .tour__guide {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
+	align-content: space-between;
+}
+.tour__guide p,
+.tour__guide img,
+.tour__img p,
+.tour__img img,
+.tour__cover p,
+.tour__cover img {
+	margin: 1rem 0;
+}
+.new-photo {
+	margin: 1rem auto;
+	padding: 0 10%;
+	text-align: center;
 }
 
 p.tour__field {
@@ -1391,11 +1465,32 @@ p.tour__field {
 	color: black;
 	text-transform: uppercase;
 }
-.new-photo {
-	margin: 1rem 0rem;
+
+.admin__tour__photo__form form {
+	position: relative;
+}
+.tour__img__wrapper {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: 5% auto;
 }
 
-/*  ADMIN PANEL */
+.tour__img {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.tour__cover {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/*  ADMIN PANEL USERS */
 .users__container {
 	max-width: 120rem;
 	margin: 0 auto;

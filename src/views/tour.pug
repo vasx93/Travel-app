@@ -65,9 +65,10 @@ block content
   //-   #map
 
   section.section-reviews
-    .reviews
-      each review in tour.reviews
-        +reviewCard(review)  
+    // section not working since users who left reviews are not in DB
+    //- .reviews
+    //-   each review in tour.reviews
+    //-     +reviewCard(review)  
 
   section.section-cta
     .cta
@@ -75,16 +76,26 @@ block content
         img(src='/img/logo-white.png', alt='Natours logo')
       img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
       img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
+
       .cta__content
-        h2.heading-secondary What are you waiting for?
-        p.cta__text #{tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
+        .cta__inner_text
+          h2.heading-secondary What are you waiting for?
+          p.cta__text #{tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
+
+
+        if (!user)
+          a.btn.btn--green(href='/login') Login to book tour
 
         if (user && user.role === 'user')
-          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-        else if ( user && user.role === 'admin')
-          //- .admin__tour__cta
-          a.button.btn.btn--green.span-all-rows(href='/login') Book tour now!
-          a.button.btn.btn-purple.span-all-rows(href=`/admin-panel/tours/${tour.id}`) Edit
-          button.btn.btn-purple.span-all-rows#delete-tour(data-tour-id=`${tour.id}`) Delete
-        else 
-          a.button.btn.btn--green.span-all-rows(href='/login') Login to book tour
+          a
+            button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+
+        .admin__tour__cta
+        if (user && user.role === 'admin')
+          a
+           button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+          a(href=`/admin-panel/tours/${tour.id}`)
+            button.btn.btn-purple Edit
+          a
+            button.btn.btn-purple#delete-tour(data-tour-id=`${tour.id}`) Delete
+        

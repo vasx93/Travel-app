@@ -39,19 +39,21 @@ block content
             .footer__top-container
               p
                 span.card__footer-value $#{tour.price}
-                |
-                span.card__footer-text  per person
+                //- |
+                //- span.card__footer-text  per person
               p.card__ratings
-                span.card__footer-value #{tour.ratingsAverage} rating
-                |
-                span.card__footer-text  (#{tour.ratingsQuantity})
-              a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details
+                span.card__footer-value Average #{tour.ratingsAverage}* 
+                //- |
+                //- span.card__footer-text  (#{tour.ratingsQuantity})
 
-            if (user && user.role === 'admin')
-              a.btn.btn-purple.btn--full#admin-edit(href=`/admin-panel/tours/${tour.id}`) Edit
-    // add button
-    if (user && user.role === 'admin')
-      a(href='/admin-panel/tours/create')
-        svg.create__btn
-          use(xlink:href='/img/icons.svg#icon-plus-circle')
+              - const date = booking.createdAt.toLocaleDateString()
+              p
+                span.card__footer-value Booked on #{date}
+              p
+                span.card__footer-value My rating #{review.rating}* 
+              
+              
+
+            
+    
     

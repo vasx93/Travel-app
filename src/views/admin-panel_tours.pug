@@ -1,48 +1,72 @@
 extends base
 
-mixin tourField(field, inputType, inputValue)
+mixin tourField(field, type='text', value)
   p.tour__field= field
-  input.tour__input(type=`${inputType}` name=`${field}`, value=`${inputValue}` required)
+  input.tour__input(name=`${field}` id=`${field}` type=`${type}` value=`${value}` required)
 
 block content
 
   main.main
     .tour__container
-      +tourField('Name', 'text', `${tour.name}`)
-      +tourField('Duration', 'text', `${tour.duration} days`)
-      +tourField('Difficulty', 'text', `${tour.difficulty}`)
-      +tourField('Price', 'text', `$${tour.price}`)
-      +tourField('Average Rating', 'text', `${tour.ratingsAverage}`)
-      +tourField('Total Ratings', 'text', `${tour.ratingsQuantity} ratings`)
-      +tourField('Max Group Size', 'text', `${tour.maxGroupSize} people`)
-      +tourField('Start Location', 'text', `${tour.startLocation.address}`)
 
-      each date in tour.startDates
-        - let startDate = date.toLocaleString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric'})
-        +tourField('Start Date', 'text', `${startDate}`)
-      
-      each loc in tour.locations
-        +tourField('Location', 'text', `Day ${loc.day} - ${loc.description}`)
-      
-      .guide__container
-        each g in tour.guides
-          .tour__guide
-            +tourField('Guide', 'text', `${g.name}`)
-            +tourField('Email', 'email', `${g.email}`)
-            img.form__user-photo(src=`/img/users/${g.photo}`, alt='Guide photo')
-            input.tour__input.new-photo(type='file' accept='image/*' name='photo' id='photo')
+      h2 Edit text fields
+      .admin__tour__text__form
 
-      +tourField('Summary', 'text', `${tour.summary}`)
-      +tourField('Description', 'text', `${tour.description}`)
+        form#text-form
+          
+          +tourField('id', '', `${tour.id}`)
+          +tourField('name', '', `${tour.name}`)
+          +tourField('duration', 'number', `${tour.duration}`)
+          +tourField('difficulty', '', `${tour.difficulty}`)
+          +tourField('price', 'number', `${tour.price}`)
+          +tourField('ratingsAverage', 'number', `${tour.ratingsAverage}`)
+          +tourField('ratingsQuantity', 'number', `${tour.ratingsQuantity}`)
+          +tourField('maxGroupSize', 'number', `${tour.maxGroupSize}`)
+          +tourField('startLocation', '', `${tour.startLocation}`)
+          +tourField('summary', '', `${tour.summary}`)
+          +tourField('description', '', `${tour.description}`)
 
-      each img in tour.images
-        p.tour__field Tour Images
-        img.form__user-photo(src=`/img/tours/${img}`, alt='Tour images')
-        input.tour__input.new-photo(type='file' accept='image/*' name='image' id='image')
+          //TODO OK NADJI NACIN DA SERVER PREPOZNA KOJI OD OVIH NESTOVANIH JE PROMENJEN
+          each date in tour.startDates
+            - let startDate = date.toLocaleString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric'})
+            p.tour__field startDate
+            input.tour__input.startDates(name='startDates' type=`text` value=`${startDate}` required)
+            //- +tourField('startDates', '', `${startDate}`)
+        
+          each loc in tour.locations
+            p.tour__field location
+            input.tour__input.locations(name='locations' type=`text` value=`${loc.description}` required)            
+            //- +tourField('location', '', `${loc.description}`)
+          
+          button.btn--full.btn.btn--green#admin__tour__text__btn Submit
 
-      p.tour__field Cover Image
-      img.header__hero-img(src=`/img/tours/${tour.imageCover}`, alt=`${tour.name}`)
-      input.tour__input.new-photo(type='file' accept='image/*' name='imageCover' id='imageCover')
+      h2 Edit guides 
+      .admin__tour__guide__form
+        form#guide-form
+          each g in tour.guides
+            .tour__guide
+              +tourField('Guide', 'text', `${g.name}`)
+              +tourField('Email', 'email', `${g.email}`)
+              img.form__user-photo(src=`/img/users/${g.photo}`, alt='Guide photo')
+              input.new-photo(type='file' accept='image/*' name='photo' id='photo')
+          button.btn--full.btn.btn--green#admin__tour__guide__btn Submit
+
+
+      h2 Edit images
+      .admin__tour__photo__form
+        form#photo-form
+          .tour__img__wrapper
+            each img in tour.images
+              .tour__img
+                p.tour__field Tour Images
+                img.form__user-photo(src=`/img/tours/${img}`, alt='Tour images')
+                input.tour__input.new-photo(type='file' accept='image/*' name='image' id='image')
+
+          .tour__cover
+            p.tour__field Cover Image
+            img.header__hero-img(src=`/img/tours/${tour.imageCover}`, alt=`${tour.name}`)
+            input.tour__input.new-photo(type='file' accept='image/*' name='imageCover' id='imageCover')
+          button.btn--full.btn.btn--green#admin__tour__photo__btn Submit
 
       //TODO -ubaci submit formu za promene, + middleware sa sve slike, i napravi controler za edit
       

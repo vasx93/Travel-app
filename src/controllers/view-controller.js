@@ -40,7 +40,7 @@ module.exports = {
 					msg: 'No tour with that name!',
 				});
 			}
-
+			// res.status(200).send(tour);
 			res.status(200).render('tour', {
 				title: tour.name,
 				tour,
@@ -102,25 +102,24 @@ module.exports = {
 
 	async myTours(req, res) {
 		try {
-			// Get access to tour IDs from all bookings, map it > query by it
-			// const userBookings = await Booking.find({ user: req.user._id });
-			// const tourIDsArray = userBookings.map(el => el.tour);
+			const booking = await Booking.find({ user: req.user._id });
+			const tours = await Tour.find({ _id: { $in: req.user.userTours } });
 
-			const tourIDsArray = req.user.userTours.map(el => el);
+			const review = await Review.find({ user: req.user._id });
 
-			const tours = await Tour.find({ _id: { $in: tourIDsArray } });
-
-			if (!tours || !tourIDsArray) {
+			if (!tours) {
 				return res.status(400).render('error', {
 					title: 'Something went wrong!',
 					msg: e.message,
 				});
 			}
 
-			res.status(200).render('overview', {
+			res.status(200).render('myTours', {
 				title: 'My tours',
 				tours,
 				user: req.user,
+				booking: booking[0],
+				review: review[0],
 			});
 		} catch (e) {
 			res.status(400).render('error', {
@@ -132,21 +131,22 @@ module.exports = {
 
 	async myReviews(req, res) {
 		try {
-			const userReviewsArray = req.user.userReviews.map(el => el);
+			// const userReviewsArray = req.user.userReviews.map(el => el);
+			// const reviews = await Review.find({ _id: { $in: userReviewsArray } });
+			const reviews = await Review.find({ _id: { $in: req.user.userReviews } });
 
-			const reviews = await Review.find({ _id: { $in: userReviewsArray } });
-
-			if (!reviews || !userReviewsArray) {
+			if (!reviews) {
 				return res.status(400).render('error', {
 					title: 'Something went wrong!',
 					msg: e.message,
 				});
 			}
 
-			res.status(200).render('reviews', {
-				title: 'My reviews',
-				reviews,
-			});
+			res.status(200).send(reviews);
+			// res.status(200).render('reviews', {
+			// 	title: 'My reviews',
+			// 	reviews,
+			// });
 		} catch (e) {
 			res.status(400).render('error', {
 				title: 'Something went wrong!',

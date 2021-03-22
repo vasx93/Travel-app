@@ -198,7 +198,7 @@ userSchema.methods.createReactivateAccountToken = async function () {
 userSchema.pre('save', async function (next) {
 	const user = this;
 
-	if (user.isModified('password' || user.isNew)) {
+	if (user.isModified('password' || user.isNew())) {
 		user.password = await bcrypt.hash(user.password, 6);
 		user.passwordChangedAt = Date.now() - 1000;
 	}

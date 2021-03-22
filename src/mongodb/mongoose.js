@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 			useUnifiedTopology: true,
 			useFindAndModify: false,
 		})
-		.then(() => console.log('MONGODB connection successful'))
+		.then(() => console.log('MONGODB LOCAL connection successful'))
 		.catch(err => console.log(err));
 } else if (process.env.NODE_ENV === 'production') {
 	mongoose
@@ -18,6 +18,6 @@ if (process.env.NODE_ENV === 'development') {
 			useUnifiedTopology: true,
 			useFindAndModify: false,
 		})
-		.then(() => console.log('MONGODB connection successful'))
+		.then(() => console.log('MONGODB ATLAS connection successful'))
 		.catch(err => console.log(err));
 }

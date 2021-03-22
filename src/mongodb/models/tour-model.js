@@ -80,32 +80,9 @@ const tourSchema = new mongoose.Schema(
 
 		startDates: [Date],
 
-		startLocation: {
-			//GeoJSON
-			type: {
-				type: String,
-				enum: ['Point'],
-				default: 'Point',
-			},
-			coordinates: [Number], //expect a number of coordinates
-			address: String,
-			description: String,
-		},
+		startLocation: String,
 
-		//* LOCATIONS EMBEDDED - geospatial
-		locations: [
-			{
-				type: {
-					type: String,
-					enum: ['Point'],
-					default: 'Point',
-				},
-				coordinates: [Number],
-				address: String,
-				description: String,
-				day: Number,
-			},
-		],
+		locations: [String],
 
 		guides: [
 			{
@@ -136,10 +113,6 @@ tourSchema.virtual('bookings', {
 	foreignField: 'tour',
 });
 
-// tourSchema.virtual('punoKosta').get(function () {
-// 	return this.price * 12;
-// });
-
 //*Hide private data methods
 tourSchema.methods.toJSON = function () {
 	const tour = this.toObject();
@@ -151,15 +124,6 @@ tourSchema.methods.toJSON = function () {
 
 	return tour;
 };
-
-//* DOCUMENT MIDDLEWARE PRE-SAVE HOOK -- runs before .save()  .create()
-//* embedding
-// tourSchema.pre('save', async function (next) {
-// 	const guides = this.guides.map(async id => await User.findById(id));
-
-// 	this.guides = await Promise.all(guides);
-// 	next();
-// });
 
 // changing url
 tourSchema.pre('save', function (next) {

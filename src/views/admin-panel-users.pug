@@ -16,18 +16,23 @@ block content
               b= user.name
           .users__info
             .users__info-labels
+              p Role
               p Email
               p Active
               p Created At
               p Updated At
+              p ID
             .users__info-text
+              p= user.role
               p= user.email
               p= user.active
               p= date 
               p= upDate
+              p= user.id
           .users__editbox
-            a.btn.btn-purple#admin-edit(href=`/admin-panel/users/${user.id}`) Edit
-            button.btn.btn-purple.span-all-rows#delete-tour(data-user-id=`${user.id}`) Delete
+            a(href=`/admin-panel/users/${user.id}`)
+              button.btn.btn-purple Edit
+            button.btn.btn-purple.delete-user(data-user-id=`${user.id}`) Delete
 
 
 

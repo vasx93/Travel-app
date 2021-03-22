@@ -8,15 +8,21 @@ const {
 const crypto = require('crypto');
 const multer = require('multer');
 const sharp = require('sharp');
+const { permittedCrossDomainPolicies } = require('helmet');
 
 //* COOKIES JWT
-const cookieOptions = {
+
+let cookieOptions = {
 	expires: new Date(
 		Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60_000
 	),
-	secure: false,
-	httpOnly: true,
+	secure: true,
+	
 };
+if (process.env.NODE_ENV === 'development') {
+	cookieOptions.secure = false
+	cookieOptions.httpOnly: true,
+}
 
 //*     FILE UPLOAD
 const upload = multer({
